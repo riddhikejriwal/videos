@@ -1,0 +1,30 @@
+class Solution {
+    unordered_map<string,priority_queue<string>> graph;
+    LinkedList<string> ans;
+    
+    public vector<string> findItinerary(vector<vector<string>>& tickets) {
+        graph=new unordered_map<>();
+        ans=new LinkedList<>();
+        
+        for(vector<string> ticket: tickets)
+        {
+            priority_queue<string> temp=graph.emplace(ticket.get(0),new priority_queue<>());
+            temp.push(ticket.get(1));
+            graph.insert(ticket.get(0),temp);
+        }
+        dfs("JFK");
+        return ans;
+    }    
+    
+    public void dfs(string src)
+    {
+        priority_queue<string> nbrs=graph.find(src);
+        
+        while(nbrs!=null && nbrs.size()>0)
+        {
+            string nbr=nbrs.remove();
+            dfs(nbr);
+        }
+        ans.addFirst(src);
+    }
+}
